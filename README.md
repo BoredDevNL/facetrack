@@ -1,6 +1,6 @@
 # facetrack
 
-A Simplearduino project that uses the camera (python script) to turn coordinates into degrees for servos attached to an arduino.
+A Simple Arduino project that uses the camera (python script) to turn coordinates into degrees for servos attached to an arduino.
 
 ## Hardware Requirements
 
@@ -30,7 +30,7 @@ A Simplearduino project that uses the camera (python script) to turn coordinates
 pip install opencv-python pyserial
 ```
 
-2. Upload the Arduino sketch (`facerec.ino`) to your Arduino board using the Arduino IDE.
+2. Upload the Arduino sketch (`facetrack.ino`) to your Arduino board using the Arduino IDE.
 
 3. Connect the hardware according to the pin configuration.
 
