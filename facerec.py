@@ -49,7 +49,7 @@ def send_serial_coordinates(x, y):
     try:
         arduino.write(command.encode('utf-8'))
     except serial.SerialException:
-        print("Serial connection lost.")
+        print("Serial connection lost. (skill issue haha)")
         return False
     return True
 
@@ -93,7 +93,7 @@ try:
 
         cv2.line(frame, (CAMERA_WIDTH // 2, 0), (CAMERA_WIDTH // 2, CAMERA_HEIGHT), (255, 255, 255), 1)
 
-        cv2.imshow('Turret Camera Tracking', frame)
+        cv2.imshow('Turret view', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -101,7 +101,7 @@ try:
         time.sleep(0.01)
 
 except KeyboardInterrupt:
-    print("Exiting due to Keyboard Interrupt.")
+    print("Exiting..")
 
 finally:
     print("Closing connection and exiting.")

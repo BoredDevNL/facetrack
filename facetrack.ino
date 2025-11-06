@@ -11,7 +11,7 @@ Servo verServo;
 const int HOR_CENTER_ANGLE = 90;
 const int VER_CENTER_ANGLE = 90;
 
-// camera instellingen (moeten de instellingen in python script matchen)
+// camera resolutie misschien aanpassen voor betere tracking
 const int CAMERA_WIDTH = 640;
 const int CAMERA_HEIGHT = 480;
 
@@ -28,7 +28,7 @@ void setup() {
   verServo.attach(VER_SERVO_PIN);
 
   Serial.begin(9600);
-  Serial.println("Turret Ready.");
+  Serial.println("Turret Initialized (I hope)");
 
   horServo.write(HOR_CENTER_ANGLE);
   verServo.write(VER_CENTER_ANGLE);
