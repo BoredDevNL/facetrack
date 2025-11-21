@@ -3,7 +3,7 @@ import serial
 import time
 import sys
 
-ARDUINO_PORT = '/dev/cu.usbmodem101'  
+ARDUINO_PORT = '/dev/cu.usbmodem11301'  
 BAUD_RATE = 9600
 
 CAMERA_WIDTH = 640
@@ -11,7 +11,7 @@ CAMERA_HEIGHT = 480
 FACE_SCALE_FACTOR = 1.1
 FACE_MIN_NEIGHBORS = 5
 # eerst indice 1 gebruiken omdat iphone indice 0 soms overneemt
-CAMERA_INDICES = [1, 0, 2, 3]
+CAMERA_INDICES = [0, 1, 2, 3]
 
 FACE_CASCADE_PATH = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
 face_cascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)

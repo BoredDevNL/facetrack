@@ -1,8 +1,8 @@
 #include <Servo.h>
 
 // gebruikte pins
-const int HOR_SERVO_PIN = 8;
-const int VER_SERVO_PIN = 7;
+const int HOR_SERVO_PIN = 9;
+const int VER_SERVO_PIN = 8;
 const int LED = 6;
 
 Servo horServo;
@@ -28,7 +28,7 @@ void setup() {
   verServo.attach(VER_SERVO_PIN);
 
   Serial.begin(9600);
-  Serial.println("Turret Initialized (I hope)");
+  Serial.println("Turret Initialized");
 
   horServo.write(HOR_CENTER_ANGLE);
   verServo.write(VER_CENTER_ANGLE);
@@ -50,7 +50,7 @@ void loop() {
         int faceX = serialData.substring(0, commaIndex).toInt();
         int faceY = serialData.substring(commaIndex + 1).toInt();
 
-        targetHor = map(faceX, 0, CAMERA_WIDTH, 0, 180);
+        targetHor = map(faceX, 0, CAMERA_WIDTH, 180, 0);
         targetHor = constrain(targetHor, 0, 180);
         horServo.write(targetHor);
         digitalWrite(LED, HIGH);
