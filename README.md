@@ -1,20 +1,24 @@
 # facetrack
 
-A Simple Arduino project that uses the camera (python script) to turn coordinates into degrees for servos attached to an arduino.
+A Simple Arduino project that uses the camera (python script) to turn coordinates into degrees for servos attached to an arduino and turn on a water pump to spray water. (Turret)
 
 ## Hardware Requirements
 
 - Arduino board
-- 2 servo motors (horizontal and vertical)
+- 4 servo motors (horizontal, vertical and 2 servo's to turn the pump on/off)
 - LED
 - Webcam
 - USB cable for Arduino connection
+- Water pump
+- Breadboard if you don't have an Arduino sensor board
 
 ## Pin Configuration
 
 - horservo: Pin 8
 - verservo: Pin 7
 - LED: Pin 6
+- servo_on: Pin 5
+- servo_off: Pin 4
 
 ## Software Requirements
 
@@ -50,11 +54,11 @@ python facerec.py
    - Initialize the camera and Arduino connection
    - Display the camera feed
    - Control the servos to track detected faces
+   - Turn on the water pump to spray water when a face is detected.
 
-4. Press 'q' to quit the program. (or ctrl + C via terminal)
+4. ctrl + c to quit
 
 ## Camera Settings
 
 - Resolution: 640x480
-- Face detection parameters are adjustable in the Python script
-- Multiple camera indices are supported for automatic selection
+
