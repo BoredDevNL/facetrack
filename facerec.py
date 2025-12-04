@@ -3,7 +3,7 @@ import serial
 import time
 import sys
 
-ARDUINO_PORT = '/dev/cu.usbmodem11301'  
+ARDUINO_PORT = '/dev/cu.usbmodem11301'
 BAUD_RATE = 9600
 
 CAMERA_WIDTH = 640
@@ -18,7 +18,7 @@ face_cascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
 
 try:
     arduino = serial.Serial(ARDUINO_PORT, BAUD_RATE, timeout=0.1) # connecten aan arduino
-    time.sleep(3) 
+    time.sleep(3)
     print(f"Connected to Arduino on port {ARDUINO_PORT}")
 except serial.SerialException as e:
     print(f"Error connecting to Arduino on {ARDUINO_PORT}.")
@@ -55,7 +55,7 @@ def send_serial_coordinates(x, y):
 
 smoothed_x = CAMERA_WIDTH // 2
 smoothed_y = CAMERA_HEIGHT // 2
-SMOOTHING_FACTOR = 0.2 
+SMOOTHING_FACTOR = 0.2
 
 try:
     while True:
@@ -74,6 +74,7 @@ try:
         )
 
         if len(faces) > 0:
+            # === TRACKING MODE: ALLEEN HIER COÖRDINATEN VERSTUREN ===
             (x, y, w, h) = max(faces, key=lambda f: f[2] * f[3])
             target_x = x + w // 2
             target_y = y + h // 2
@@ -81,15 +82,25 @@ try:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.circle(frame, (target_x, target_y), 5, (0, 0, 255), -1)
             cv2.putText(frame, 'TRACKING', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+            # Bereken de gesmoothe coördinaten
+            smoothed_x = int(smoothed_x + (target_x - smoothed_x) * SMOOTHING_FACTOR)
+            smoothed_y = int(smoothed_y + (target_y - smoothed_y) * SMOOTHING_FACTOR)
+
+            # Verstuur de coördinaten naar de Arduino
+            send_serial_coordinates(smoothed_x, smoothed_y)
+
         else:
+            # === SEARCHING MODE: NIETS VERSTUREN ===
+            # De Turret moet stoppen met bewegen en uitschakelen (via Arduino timeout)
             target_x = CAMERA_WIDTH // 2
             target_y = CAMERA_HEIGHT // 2
-            cv2.putText(frame, 'SEARCHING', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2) 
-
-        smoothed_x = int(smoothed_x + (target_x - smoothed_x) * SMOOTHING_FACTOR)
-        smoothed_y = int(smoothed_y + (target_y - smoothed_y) * SMOOTHING_FACTOR)
-
-        send_serial_coordinates(smoothed_x, smoothed_y)
+            cv2.putText(frame, 'SEARCHING', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            
+            # De smoothing kan hier nog steeds plaatsvinden, maar de output wordt niet verzonden.
+            # Dit helpt om de turret zachtjes naar het midden te brengen als er opnieuw een gezicht wordt gedetecteerd.
+            smoothed_x = int(smoothed_x + (target_x - smoothed_x) * SMOOTHING_FACTOR)
+            smoothed_y = int(smoothed_y + (target_y - smoothed_y) * SMOOTHING_FACTOR)
 
         cv2.line(frame, (CAMERA_WIDTH // 2, 0), (CAMERA_WIDTH // 2, CAMERA_HEIGHT), (255, 255, 255), 1)
 
@@ -105,7 +116,8 @@ except KeyboardInterrupt:
 
 finally:
     print("Closing connection and exiting.")
-    send_serial_coordinates(CAMERA_WIDTH // 2, CAMERA_HEIGHT // 2) 
+    # Stuur de midden-positie als een laatste commando om de Arduino te resetten.
+    send_serial_coordinates(CAMERA_WIDTH // 2, CAMERA_HEIGHT // 2)
     if cap is not None:
         cap.release()
     cv2.destroyAllWindows()
