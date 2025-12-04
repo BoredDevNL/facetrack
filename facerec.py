@@ -17,7 +17,7 @@ FACE_CASCADE_PATH = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml
 face_cascade = cv2.CascadeClassifier(FACE_CASCADE_PATH)
 
 try:
-    arduino = serial.Serial(ARDUINO_PORT, BAUD_RATE, timeout=0.1)
+    arduino = serial.Serial(ARDUINO_PORT, BAUD_RATE, timeout=0.1) # connecten aan arduino
     time.sleep(3) 
     print(f"Connected to Arduino on port {ARDUINO_PORT}")
 except serial.SerialException as e:
@@ -37,7 +37,7 @@ for i in CAMERA_INDICES:
         break
 
 if cap is None:
-    print("Failed to open any webcam using tested indices. (iphone misschien aan het kloten met camera van mac?)")
+    print("Failed to open webcam.")
     arduino.close()
     sys.exit()
 
@@ -84,7 +84,7 @@ try:
         else:
             target_x = CAMERA_WIDTH // 2
             target_y = CAMERA_HEIGHT // 2
-            cv2.putText(frame, 'SEARCHING', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            cv2.putText(frame, 'SEARCHING', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2) 
 
         smoothed_x = int(smoothed_x + (target_x - smoothed_x) * SMOOTHING_FACTOR)
         smoothed_y = int(smoothed_y + (target_y - smoothed_y) * SMOOTHING_FACTOR)
