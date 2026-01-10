@@ -7,9 +7,8 @@ const int SERVO_ON = 3;
 const int SERVO_OFF = 4;
 const int LED = 6;
 
-// Nieuwe variabelen voor de Timeout-logica
 unsigned long lastDataTime = 0;
-const long TIMEOUT_MS = 500; // 500 milliseconden (0.5s) wachttijd zonder data
+const long TIMEOUT_MS = 500;
 
 Servo horServo;
 Servo verServo;
